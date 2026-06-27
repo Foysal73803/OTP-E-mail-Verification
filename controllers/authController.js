@@ -96,12 +96,12 @@ export const resendOTP = catchAsync(async (req, res, next) => {
     user.otpExpiry = new Date(Date.now() + 5 * 60 * 1000);
     await user.save();
 
-    await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: "Resend OTP Verification",
-        text: `Your new OTP is ${otp}`
-    });
+    // await transporter.sendMail({
+    //     from: process.env.EMAIL_USER,
+    //     to: email,
+    //     subject: "Resend OTP Verification",
+    //     text: `Your new OTP is ${otp}`
+    // });
 
     res.status(200).json({ success: true, message: "OTP resent successfully." });
 });
@@ -116,9 +116,7 @@ export const login = catchAsync(async (req, res, next) => {
     const isMatch = await bcrypt.compare(pass, user.hashedPass);
     if (!isMatch) return next(new appError("Incorrect Password", 400));
 
-    if (!user.isVerified) {
-        return next(new appError("Email not verified. Please verify OTP", 400));
-    }
+    if (!user.isVerified) return next(new appError("Email not verified. Please verify OTP", 400));
 
     req.session.user = {
         id: user._id,

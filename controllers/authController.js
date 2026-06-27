@@ -126,7 +126,7 @@ export const login = catchAsync(async (req, res, next) => {
     res.status(200).json({ success: true, message: "Login Successful" });
 });
 
-//Logout user
+// Logout user
 export const logout = catchAsync(async (req, res) => {
     req.session.destroy((err) => {
         if (err) return res.status(500).json({ message: 'Error logging out' });
@@ -134,7 +134,7 @@ export const logout = catchAsync(async (req, res) => {
     });
 });
 
-// dashboard
+// Dashboard
 export const dashboard = async (req, res) => {
     res.json({ message: `Welcome to the dashboard, ${req.session.user.name}` });
 };
